@@ -251,7 +251,7 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
   const [pos, setPos] = useState({ x: 50, y: 50 });
   const [completed, setCompleted] = useState(false);
   const TARGET = 5;
-  const speed = useRef(1200);
+  const speed = useRef(800);
   const sfx = useSfx();
   const lastPos = useRef({ x: 50, y: 50 });
 
@@ -279,7 +279,7 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
     if (completed) return;
     const next = catches + 1;
     setCatches(next);
-    speed.current = Math.max(350, 1200 - next * 200);
+    speed.current = Math.max(200, 800 - next * 150);
     sfx.ding();
 
     confetti({
@@ -333,7 +333,7 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
               left: `${pos.x}%`,
               top: `${pos.y}%`,
             }}
-            transition={{ type: "spring", stiffness: 600, damping: 20 }}
+            transition={{ type: "spring", stiffness: 900, damping: 15 }}
             onClick={handleCatch}
             whileTap={{ scale: 0.8 }}
             style={{ transform: "translate(-50%, -50%)" }}
