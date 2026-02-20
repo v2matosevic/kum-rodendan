@@ -21,6 +21,69 @@ const ConfettiRain = dynamic(() => import("@/components/ConfettiExplosion"), {
 function PartyContent() {
   const musicRef = useRef<Howl | null>(null);
   const [showMessage, setShowMessage] = useState(false);
+  const [shakeCount, setShakeCount] = useState(0);
+  const sfx = useSfx();
+
+  // Shake-to-confetti on mobile
+  useEffect(() => {
+    let lastX = 0, lastY = 0, lastZ = 0;
+    let lastShake = 0;
+
+    const handleMotion = (e: DeviceMotionEvent) => {
+      const acc = e.accelerationIncludingGravity;
+      if (!acc || acc.x === null || acc.y === null || acc.z === null) return;
+
+      const dx = Math.abs(acc.x - lastX);
+      const dy = Math.abs(acc.y - lastY);
+      const dz = Math.abs(acc.z - lastZ);
+
+      lastX = acc.x;
+      lastY = acc.y;
+      lastZ = acc.z;
+
+      if (dx + dy + dz > 30 && Date.now() - lastShake > 500) {
+        lastShake = Date.now();
+        sfx.bonk();
+        setShakeCount((c) => c + 1);
+        confetti({
+          particleCount: 80,
+          spread: 120,
+          origin: { x: Math.random(), y: Math.random() * 0.5 },
+          colors: ["#FF69B4", "#FFD700", "#00CED1", "#FF6347", "#9B59B6"],
+        });
+        const scalar = 2;
+        const shapes = ["🎂", "🎈", "🎉"].map((text) =>
+          confetti.shapeFromText({ text, scalar })
+        );
+        confetti({
+          shapes,
+          scalar,
+          particleCount: 10,
+          spread: 100,
+          origin: { x: Math.random(), y: Math.random() * 0.6 },
+        });
+      }
+    };
+
+    window.addEventListener("devicemotion", handleMotion);
+    return () => window.removeEventListener("devicemotion", handleMotion);
+  }, [sfx]);
+
+  // Tap anywhere for extra confetti bursts
+  useEffect(() => {
+    const handleTap = (e: PointerEvent) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      confetti({
+        particleCount: 25,
+        spread: 60,
+        origin: { x, y },
+        colors: ["#FF69B4", "#FFD700", "#00CED1"],
+      });
+    };
+    window.addEventListener("pointerdown", handleTap);
+    return () => window.removeEventListener("pointerdown", handleTap);
+  }, []);
 
   useEffect(() => {
     const burst = () => {
@@ -34,6 +97,21 @@ function PartyContent() {
     burst();
     setTimeout(burst, 500);
     setTimeout(burst, 1000);
+
+    // Periodic emoji fireworks
+    const emojiTimer = setInterval(() => {
+      const scalar = 2;
+      const shapes = ["🎂", "🎈", "🎉", "👑", "🍺"].map((text) =>
+        confetti.shapeFromText({ text, scalar })
+      );
+      confetti({
+        shapes,
+        scalar,
+        particleCount: 12,
+        spread: 140,
+        origin: { x: Math.random(), y: Math.random() * 0.4 },
+      });
+    }, 3000);
 
     try {
       musicRef.current = new Howl({
@@ -52,6 +130,7 @@ function PartyContent() {
     return () => {
       musicRef.current?.stop();
       clearTimeout(timer);
+      clearInterval(emojiTimer);
     };
   }, []);
 
@@ -157,6 +236,17 @@ function PartyContent() {
             </motion.div>
           ))}
         </div>
+
+        {/* Shake hint for mobile */}
+        <motion.p
+          className="text-white/40 text-xs sm:text-sm mt-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 4 }}
+        >
+          📱 Treseš telefon = više konfeta
+          {shakeCount > 0 && ` (${shakeCount}x)`}
+        </motion.p>
       </div>
     </div>
   );

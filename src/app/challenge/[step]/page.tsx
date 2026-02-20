@@ -84,7 +84,8 @@ function Challenge1({ onComplete }: { onComplete: () => void }) {
       <p className="text-white/50 text-sm">3 sekunde. Nemoj pustit.</p>
 
       <motion.div
-        className="relative select-none touch-none"
+        className="relative select-none"
+        style={{ touchAction: "manipulation", cursor: completed ? "default" : "pointer" }}
         onPointerDown={startHold}
         onPointerUp={stopHold}
         onPointerLeave={stopHold}
@@ -93,7 +94,6 @@ function Challenge1({ onComplete }: { onComplete: () => void }) {
           rotate: completed ? 360 : headRotation,
         }}
         transition={completed ? { type: "spring", stiffness: 200 } : { duration: 0.1 }}
-        style={{ cursor: completed ? "default" : "pointer" }}
       >
         <Image
           src="/kum-head.png"
@@ -157,7 +157,7 @@ function Challenge1({ onComplete }: { onComplete: () => void }) {
             {failMessages[(fails - 1) % failMessages.length]}
           </motion.p>
         ) : (
-          <p className="text-white/40">Drži glavu 👇</p>
+          <p className="text-white/40">Stisni mu glavu 👇</p>
         )}
       </motion.div>
     </div>
@@ -251,17 +251,25 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
   const [pos, setPos] = useState({ x: 50, y: 50 });
   const [completed, setCompleted] = useState(false);
   const TARGET = 5;
-  const speed = useRef(2000);
+  const speed = useRef(1200);
   const sfx = useSfx();
+  const lastPos = useRef({ x: 50, y: 50 });
 
   useEffect(() => {
     if (completed) return;
     const moveTarget = () => {
       sfx.whoosh();
-      setPos({
-        x: 10 + Math.random() * 70,
-        y: 10 + Math.random() * 60,
-      });
+      // Move far from current position for harder catching
+      let nx, ny;
+      do {
+        nx = 5 + Math.random() * 80;
+        ny = 5 + Math.random() * 75;
+      } while (
+        Math.abs(nx - lastPos.current.x) < 25 ||
+        Math.abs(ny - lastPos.current.y) < 20
+      );
+      lastPos.current = { x: nx, y: ny };
+      setPos({ x: nx, y: ny });
     };
     const interval = setInterval(moveTarget, speed.current);
     return () => clearInterval(interval);
@@ -271,7 +279,7 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
     if (completed) return;
     const next = catches + 1;
     setCatches(next);
-    speed.current = Math.max(500, 2000 - next * 300);
+    speed.current = Math.max(350, 1200 - next * 200);
     sfx.ding();
 
     confetti({
@@ -304,7 +312,7 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
       <NeonText className="text-2xl md:text-4xl text-center">
         Uhvati glavu! 🎯
       </NeonText>
-      <p className="text-white/50 text-sm">{TARGET}x. Bježi ti...</p>
+      <p className="text-white/50 text-sm">Kum Dodgeiren</p>
 
       <motion.div
         className="text-4xl font-bold"
@@ -325,7 +333,7 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
               left: `${pos.x}%`,
               top: `${pos.y}%`,
             }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            transition={{ type: "spring", stiffness: 600, damping: 20 }}
             onClick={handleCatch}
             whileTap={{ scale: 0.8 }}
             style={{ transform: "translate(-50%, -50%)" }}
