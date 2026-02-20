@@ -1,26 +1,152 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a1a;
+  --foreground: #ededed;
+  --pink: #FF69B4;
+  --gold: #FFD700;
+  --blue: #00CED1;
+  --coral: #FF6347;
+  --purple: #9B59B6;
+  --lime: #32CD32;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-pink: var(--pink);
+  --color-gold: var(--gold);
+  --color-blue: var(--blue);
+  --color-coral: var(--coral);
+  --color-purple: var(--purple);
+  --color-lime: var(--lime);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Aurora animated gradient background */
+.aurora-bg {
+  background: linear-gradient(-45deg, #ff69b4, #ffd700, #ff6347, #00ced1, #9b59b6, #32cd32);
+  background-size: 400% 400%;
+  animation: aurora 12s ease infinite;
+}
+
+@keyframes aurora {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Neon glow text — tight glow so text stays crisp */
+.neon-glow {
+  color: #fff;
+  text-shadow:
+    0 0 4px #ff69b4,
+    0 0 8px #ff69b4,
+    0 0 16px #ff1493;
+}
+
+.neon-glow-gold {
+  color: #fff;
+  text-shadow:
+    0 0 4px #ffd700,
+    0 0 8px #ffd700,
+    0 0 16px #ff8c00;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Neon border */
+.neon-border {
+  border: 2px solid #ff69b4;
+  box-shadow:
+    0 0 4px #ff69b4,
+    0 0 10px #ff1493;
+  border-radius: 16px;
+}
+
+/* Animated gradient text */
+.gradient-text {
+  background: linear-gradient(90deg, #ff69b4, #ffd700, #ff6347, #00ced1, #9b59b6, #ff69b4);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 3s linear infinite;
+}
+
+@keyframes gradientShift {
+  to { background-position: 200% center; }
+}
+
+/* Pulse glow animation */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4; }
+  50% { box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff69b4, 0 0 60px #ff1493; }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Float animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.float-anim {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Spin animation */
+@keyframes spin3d {
+  from { transform: rotateY(0deg) rotateX(0deg); }
+  to { transform: rotateY(360deg) rotateX(360deg); }
+}
+
+.spin-3d {
+  animation: spin3d 4s linear infinite;
+}
+
+/* Page transition wrapper */
+.page-wrapper {
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
