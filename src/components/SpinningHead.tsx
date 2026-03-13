@@ -24,7 +24,7 @@ export default function SpinningHead({
       style={{ perspective: 800 }}
     >
       <Image
-        src="/kum-head.png"
+        src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/kum-head.png`}
         alt="Kum"
         width={size}
         height={size}

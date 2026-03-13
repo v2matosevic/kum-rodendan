@@ -54,7 +54,7 @@ export default function FloatingHeads({ count = 12 }: { count?: number }) {
           style={{ position: "fixed", left: 0 }}
         >
           <Image
-            src="/kum-head.png"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/kum-head.png`}
             alt="Kum"
             width={h.size}
             height={h.size}

@@ -96,7 +96,7 @@ function Challenge1({ onComplete }: { onComplete: () => void }) {
         transition={completed ? { type: "spring", stiffness: 200 } : { duration: 0.1 }}
       >
         <Image
-          src="/kum-head.png"
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/kum-head.png`}
           alt="Kum"
           width={140}
           height={140}
@@ -228,7 +228,7 @@ function Challenge2({ onComplete }: { onComplete: () => void }) {
         disabled={completed}
       >
         <Image
-          src="/kum-head.png"
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/kum-head.png`}
           alt="Kum"
           width={100}
           height={100}
@@ -338,7 +338,7 @@ function Challenge3({ onComplete }: { onComplete: () => void }) {
             style={{ transform: "translate(-50%, -50%)" }}
           >
             <Image
-              src="/kum-head.png"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/kum-head.png`}
               alt="Uhvati me!"
               width={60}
               height={60}
