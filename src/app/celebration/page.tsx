@@ -115,7 +115,7 @@ function PartyContent() {
 
     try {
       musicRef.current = new Howl({
-        src: ["/sounds/birthday.mp3"],
+        src: [`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/sounds/birthday.mp3`],
         loop: true,
         volume: 0,
       });
